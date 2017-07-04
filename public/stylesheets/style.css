@@ -1,0 +1,35 @@
+.table-hover {
+    cursor: pointer;
+}
+
+.heroHelloWorld {
+    text-align: center;
+    font-size: 100px;
+}
+
+.fixed-ratio-resize { /* basic responsive img */
+    max-width: 100%;
+    height: auto;
+    width: auto\9; /* IE8 */
+}
+
+.mypanel  {
+    height:200px;
+}
+
+.panel-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mypanel-clock {
+    font-size: 60px;
+    font-weight: bold;
+}
+
+.mypanel-date {
+    font-size: 120px;
+    font-weight: bold;
+}
+

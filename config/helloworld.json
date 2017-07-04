@@ -1,0 +1,11 @@
+{
+    "yandex": {
+        "apikey": "trnsl.1.1.20170703T164628Z.568a3eb625c68250.f74d24f6e42ed2015e0c8631eb749204ba9f9920",
+        "uri": "https://translate.yandex.net/api/v1.5/tr.json/translate"
+    },
+    "wunderground": {
+        "apikey": "ef95aeb351eaf20a",
+        "uri": "http://api.wunderground.com/api/",
+        "city": "UK/London.json"
+    }
+}

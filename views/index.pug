@@ -1,0 +1,63 @@
+extends layout
+
+block content
+
+  if greeting.translation == null
+      h1.heroHelloWorld Translating...
+  else
+      h1.heroHelloWorld= greeting.translation
+  p.text-center That's #{greeting.language} for 'Hello, World' in the #{font.name} font
+  hr
+
+  .row
+    .col-md-3
+      .panel.panel-default
+        .panel-body.mypanel
+          .mypanel-clock
+        .panel-footer.text-center
+          | Time
+
+    .col-md-3
+      .panel.panel-default
+        .panel-body.mypanel
+          .mypanel-date
+        .panel-footer.text-center
+          | Date
+
+    .col-md-3
+      .panel.panel-default
+        .panel-body.mypanel
+          .mypanel-weather
+        .panel-footer.text-center
+          | Weather
+
+    .col-md-3
+      .panel.panel-default
+        .panel-body.mypanel
+          .mypanel-kitty
+            img.fixed-ratio-resize(src='http://loremflickr.com/230/170/cat')
+        .panel-footer.text-center
+          | Kitty!
+
+  .row
+    .col-md-12
+      .well
+        b Chuck Norris Fact Of The Day:
+        | 
+        =chuck
+
+  .row
+    each user in users
+      .col-md-2
+        .panel.panel-default
+          .panel-body
+            p= user.name
+          .panel-footer.text-center
+            =user.status
+          
+
+    script.
+      $(document).ready(function(){
+        startClock();
+        getWeather();
+      })
