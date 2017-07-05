@@ -6,6 +6,6 @@
     "wunderground": {
         "apikey": "ef95aeb351eaf20a",
         "uri": "http://api.wunderground.com/api/",
-        "city": "UK/London.json"
+        "city": "UK/London"
     }
 }

@@ -45,8 +45,10 @@ app.use((req, res, next) => {
   if(typeof req.session.user == 'undefined' && excludePages.indexOf(req.url) == -1) {
     res.redirect('/login');
   } else {
+    // Always echo back the user record so we can display a greeting
     res.locals.authuser = req.session.user;
   }
+  // Always echo back the URL so we can adjust the navbar
   res.locals.url = req.url;
   next();
 });
@@ -61,6 +63,23 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+/*
+// Create our WebSocket connection
+var wsServer = require('http').createServer(app);
+var wsIo = require('socket.io')(wsServer);
+
+// WebSocket events
+wsIo.on('connection', (socket) => {
+    console.log('CONNECTED');
+    socket.on('statusChange', function (data) {
+      console.log(data);
+    });
+});
+
+// Start listening for connections
+wsServer.listen(3001);
+*/
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -77,8 +96,5 @@ app.use(function(err, req, res, next) {
 if (app.get('env') === 'development') {
   app.locals.pretty = true;
 }
-
-// Load our application config
-
 
 module.exports = app;

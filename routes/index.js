@@ -165,7 +165,7 @@ router.get('/logout', function(req, res, next) {
 router.get('/weather', function(req, res, next) {
 
     // Build the query    
-    var getString = `${config.wunderground.uri}${config.wunderground.apikey}/conditions/q/${config.wunderground.city}`;
+    var getString = `${config.wunderground.uri}${config.wunderground.apikey}/conditions/q/${config.wunderground.city}.json`;
 
     request.get({uri: getString, json: true}, (error, response, body) => {
 

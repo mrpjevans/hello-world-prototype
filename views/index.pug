@@ -15,14 +15,14 @@ block content
         .panel-body.mypanel
           .mypanel-clock
         .panel-footer.text-center
-          | Time
+          | Server Time
 
     .col-md-3
       .panel.panel-default
         .panel-body.mypanel
           .mypanel-date
         .panel-footer.text-center
-          | Date
+          | Server Date
 
     .col-md-3
       .panel.panel-default
@@ -53,11 +53,23 @@ block content
           .panel-body
             p= user.name
           .panel-footer.text-center
-            =user.status
+            if user.id != authuser.id
+              span(data-userid=user.id)= user.status
+            else
+              .dropdown
+                button.btn.btn-link(type='button',data-toggle='dropdown')
+                  span#myStatus= user.status
+                  | 
+                  span.caret
+                ul.dropdown-menu
+                  li.set-status: a In
+                  li.set-status: a Out
+                  li.set-status: a Busy
           
 
     script.
-      $(document).ready(function(){
-        startClock();
+      $(document).ready(function() {
+        startSocket();
+        initSetStatus(#{authuser.id});
         getWeather();
       })

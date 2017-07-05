@@ -1,26 +1,26 @@
-function startClock() {
+var socket;
 
-    const now = new Date();
-    let d = now.getDate();
-    let h = now.getHours();
-    let m = now.getMinutes();
-    let s = now.getSeconds();
-    m = padTime(m);
-    s = padTime(s);
-    
-    $('.mypanel-clock').html(h + ":" + m + ":" + s);
-    if($('.mypanel-date').html() != d) {
-        $('.mypanel-date').html(d);
-    }
+function startSocket() {
+  
+  socket = io.connect(); 
+  
+  socket.on('statusChange', function(data) {
+    $('span[data-userid=' + data.id + ']').html(data.status);
+  });
 
-    let t = setTimeout(startClock, 500);
+  socket.on('time', function(data) {
+    $('.mypanel-clock').html(data.time);
+    $('.mypanel-date').html(data.date);
+  })
+
 }
-
-function padTime(i) {
-    if (i < 10) {
-        i = "0" + i
-    };
-    return i;
+function initSetStatus(id) {
+    $('li.set-status a').on('click', function(e) {
+        var newStatus = $(e.target).html();
+        $('#myStatus').html(newStatus);
+        var payload = {'id': id, 'status': newStatus};
+        socket.emit('statusChange', payload);
+    });
 }
 
 function getWeather() {
