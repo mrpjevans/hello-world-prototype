@@ -1,31 +1,31 @@
 'use strict';
 
 module.exports = {
-  up: function (queryInterface, Sequelize) {
-    queryInterface.createTable(
-      'Translations',
-      {
-        id: {
-          type: Sequelize.INTEGER,
-          primaryKey: true,
-          autoIncrement: true
-        },
-        language: {
-          type: Sequelize.STRING,
-          allowNull: false
-        },
-        languageCode: {
-          type: Sequelize.STRING,
-          allowNull: false
-        },
-        translation: {
-          type: Sequelize.STRING,
-        }
-      }
-    )
-  },
+    up: function (queryInterface, Sequelize) {
+        queryInterface.createTable(
+            'Translations',
+            {
+                id: {
+                    type: Sequelize.INTEGER,
+                    primaryKey: true,
+                    autoIncrement: true
+                },
+                language: {
+                    type: Sequelize.STRING,
+                    allowNull: false
+                },
+                languageCode: {
+                    type: Sequelize.STRING,
+                    allowNull: false
+                },
+                translation: {
+                    type: Sequelize.STRING,
+                }
+            }
+        );
+    },
 
-  down: function (queryInterface, Sequelize) {
-    queryInterface.dropTable('Translations');
-  }
+    down: function (queryInterface) {
+        queryInterface.dropTable('Translations');
+    }
 };

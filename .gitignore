@@ -1,1 +1,4 @@
 .DS_Store
+db/hello_world.sqlite
+node_modules
+.eslintrc.json

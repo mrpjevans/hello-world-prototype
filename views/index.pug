@@ -2,6 +2,7 @@ extends layout
 
 block content
 
+  // If we have a translation, show it. Otherwise just display a placeholder.
   if greeting.translation == null
       h1.heroHelloWorld Translating...
   else
@@ -9,55 +10,20 @@ block content
   p.text-center That's #{greeting.language} for 'Hello, World' in the #{font.name} font
   hr
 
-  .row
-    .col-md-3
-      .panel.panel-default
-        .panel-body.mypanel
-          .mypanel-clock
-        .panel-footer.text-center
-          | Server Time
-
-    .col-md-3
-      .panel.panel-default
-        .panel-body.mypanel
-          .mypanel-date
-        .panel-footer.text-center
-          | Server Date
-
-    .col-md-3
-      .panel.panel-default
-        .panel-body.mypanel
-          .mypanel-weather
-        .panel-footer.text-center
-          | Weather
-
-    .col-md-3
-      .panel.panel-default
-        .panel-body.mypanel
-          .mypanel-kitty
-            img.fixed-ratio-resize(src='http://loremflickr.com/230/170/cat')
-        .panel-footer.text-center
-          | Kitty!
-
-  .row
-    .col-md-12
-      .well
-        b Chuck Norris Fact Of The Day:
-        | 
-        =chuck
-
+  // User Status Panels
   .row
     each user in users
       .col-md-2
         .panel.panel-default
           .panel-body
-            p= user.name
+            p: img.fixed-ratio-resize(src='/avatar?username=' + user.username)
           .panel-footer.text-center
+            p= user.name
             if user.id != authuser.id
-              span(data-userid=user.id)= user.status
+              div(data-userid=user.id): strong= user.status
             else
               .dropdown
-                button.btn.btn-link(type='button',data-toggle='dropdown')
+                button.btn.btn-link.status-button(type='button',data-toggle='dropdown')
                   span#myStatus= user.status
                   | 
                   span.caret
@@ -65,8 +31,40 @@ block content
                   li.set-status: a In
                   li.set-status: a Out
                   li.set-status: a Busy
-          
+  
 
+  // First row of panels
+  .row
+    .col-md-4
+      .panel.panel-default
+        .panel-body.mypanel
+          .mypanel-clock
+        .panel-footer.text-center
+          | Server Time
+
+    .col-md-4
+      .panel.panel-default
+        .panel-body.mypanel
+          .mypanel-date
+            span.date-month
+            span 
+            span.date-date
+        .panel-footer.text-center
+          | Server Date
+
+    .col-md-4
+      .panel.panel-default
+        .panel-body.mypanel
+          .mypanel-weather
+        .panel-footer.text-center
+          | Weather
+
+  // Chuck Norris
+  .row
+    .col-md-12
+      .well.chuck= chuck
+
+    // Once the document has loaded, this script sets everything up
     script.
       $(document).ready(function() {
         startSocket();

@@ -2,8 +2,12 @@ extends ../layout
 
 block content
     h1 Users
-    if alert && alert.type == 'deleted'
-        div.alert.alert-success User deleted successfully
+    if alert
+        case alert.type
+            when 'deleted'
+                div.alert.alert-success User deleted successfully
+            when 'self'
+                div.alert.alert-warning You cannot delete yourself
     table.table.table-hover
         thead
             th Username

@@ -1,33 +1,32 @@
-var express = require('express');
-var router = express.Router();
-var path = require('path');
-
+const express = require('express');
+const router = express.Router();
+const path = require('path');
 const models = require(path.join(__dirname,'..','models/index'));
 const User = models.User;
 
 // GET list of all users
-router.get('/', function(req, res, next) {
+router.get('/', (req, res) => {
 
     let alert = {};
-    if(req.query.alert && req.query.alert == 'deleted') {
-        alert = {type: 'deleted'};
+    if(req.query.alert) {
+        alert = {type: req.query.alert};
     }
 
     // Get all the users
-    const users = User.findAll()
-    .then((users) => {
-        res.render('users/index', {users: users, alert: alert});
-    });
+    User.findAll()
+        .then((users) => {
+            res.render('users/index', {users: users, alert: alert});
+        });
 
 });
 
 // GET the creation form
-router.get('/create', function(req, res, next) {
+router.get('/create', (req, res) => {
     res.render('users/create', {fields: {}, problems: {}, csrf: req.csrfToken()});
 });
 
 // Post back to the form
-router.post('/create', function(req, res, next) {
+router.post('/create', (req, res) => {
 
     // We can go ahead and create the record as all validation is done in the model
     User.create(req.body).then(() => {
@@ -41,8 +40,8 @@ router.post('/create', function(req, res, next) {
         
         // Let's make the errors a little easier to parse in the template
         // and reduce the amount of data moving around
-        problems = {}
-        errs.errors.forEach((item, index) => {
+        let problems = {};
+        errs.errors.forEach((item) => {
             problems[item.path] = item.message;
         });
        
@@ -54,7 +53,7 @@ router.post('/create', function(req, res, next) {
 });
 
 // Request a specific user
-router.get('/:username/', function(req, res, next) {
+router.get('/:username/', (req, res) => {
 
     // Get the user and hand the data back to the form
     User.findOne({where: {username: req.params.username}})
@@ -65,7 +64,7 @@ router.get('/:username/', function(req, res, next) {
 });
 
 // Update a user
-router.post('/:username/', function(req, res, next) {
+router.post('/:username/', (req, res) => {
 
     // Remove reference to the password fields if not populated
     if(req.body.password.length == 0){
@@ -77,7 +76,7 @@ router.post('/:username/', function(req, res, next) {
     User.update(
         req.body,
         {where: {id: req.body.id}}
-        )
+    )
         .then(() => {
 
             // It worked! Return the user to the page with a blank form
@@ -89,8 +88,8 @@ router.post('/:username/', function(req, res, next) {
             
             // Let's make the errors a little easier to parse in the template
             // and reduce the amount of data moving around
-            problems = {}
-            errs.errors.forEach((item, index) => {
+            let problems = {};
+            errs.errors.forEach((item) => {
                 problems[item.path] = item.message;
             });
            
@@ -102,14 +101,18 @@ router.post('/:username/', function(req, res, next) {
 });
 
 // Delete a user
-router.post('/:username/delete', function(req, res, next) {
+router.post('/:username/delete', (req, res) => {
 
-    User.destroy({
-        where: {username: req.body.username}
+    if(req.session.user.username == req.body.username) {
+        res.redirect('/users/?alert=self');
+    } else {
+        User.destroy({
+            where: {username: req.body.username}
         }).then(() => {
             res.redirect('/users/?alert=deleted');
         }
-    );
+        );
+    }
 
     
 });

@@ -1,19 +1,18 @@
-var express = require('express');
-var router = express.Router();
-var path = require('path');
+const express = require('express');
+const router = express.Router();
+const path = require('path');
 const bcrypt = require('bcrypt');
 const Sequelize = require('sequelize');
 const request = require('request');
 const fs = require("fs");
 const readline = require('readline');
-
 const models = require(path.join(__dirname,'..','models/index'));
 const User = models.User;
 const config = require(path.join(__dirname,'..','config/helloworld.json'));
 
 
 // GET home page
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
 
     let lang;
 
@@ -93,7 +92,7 @@ router.get('/', function(req, res, next) {
 
         // Finally, a list of users
         const userList = await User.findAll({
-            attributes: ['id', 'name', 'status']
+            attributes: ['id', 'username', 'name', 'status']
         });
         
         const users = userList.map((singleUser) => {
@@ -111,12 +110,12 @@ router.get('/', function(req, res, next) {
 });
 
 // GET Login page
-router.get('/login', function(req, res, next) {
+router.get('/login', (req, res, next) => {
     res.render('login', {username: req.body.username, csrf: req.csrfToken()});
 });
 
 // Attempt login
-router.post('/login', function(req, res, next) {
+router.post('/login', (req, res, next) => {
 
     User.find({where: {username: req.body.username}})
         .then((user) => {
@@ -151,7 +150,7 @@ router.post('/login', function(req, res, next) {
 });
 
 // Log out (end our session)
-router.get('/logout', function(req, res, next) {
+router.get('/logout', (req, res, next) => {
 
     if(typeof req.session.user != 'undefined') {
         delete req.session.user;
@@ -162,17 +161,40 @@ router.get('/logout', function(req, res, next) {
 });
 
 // Get the weather
-router.get('/weather', function(req, res, next) {
+router.get('/weather', (req, res, next) => {
 
     // Build the query    
     var getString = `${config.wunderground.uri}${config.wunderground.apikey}/conditions/q/${config.wunderground.city}.json`;
 
+    // Make the call and return the response verbatim
     request.get({uri: getString, json: true}, (error, response, body) => {
 
         res.json(body);
 
     });
 
+});
+
+// Avatar generator
+router.get('/avatar', (req, res, next) => {
+
+    //res.writeHead(200, {'Content-Type': 'image/png' });
+
+    // Work out the path to the related avatar
+    const filePath = path.join(__dirname, "..", "public", "images", `${req.query.username}.png`);
+
+    // Does it exist?
+    const file = fs.access(filePath, fs.constants.R_OK, (err) => {
+
+        // If no, send the default else send their image
+        if(err) {
+            res.sendFile(path.join(__dirname, "..", "public", "images", "unknown.png"));
+        } else {
+            res.sendFile(filePath);
+        }
+
+    });
+    
 });
 
 module.exports = router;
