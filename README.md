@@ -2,7 +2,7 @@
 
 ## Installation
 
-This repo no longer contains the db and mode_modules required, so there is an
+This repo no longer contains the db and node_modules required, so there is an
 installation process to follow.
 
 After cloning or downloading, cd to the root directory and issue the following
@@ -21,3 +21,5 @@ To start the server (with debug output):
 **Please Note** This version contains 2 private api keys, so is not for public
 distribution. The final version will not contain these keys and the user will
 be required to configure them before running up the server.
+
+Default login is admin / admin. All passwords are the same as the username by default.
