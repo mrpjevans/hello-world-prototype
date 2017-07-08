@@ -8,8 +8,9 @@ installation process to follow.
 After cloning or downloading, cd to the root directory and issue the following
 commands in order:
 
-- $ npm install -g sequelize-cli
 - $ npm install
+- $ npm install -g sequelize-cli
+- $ mkdir db
 - $ sequelize db:migrate
 - $ sequelize db:seed:all
 
